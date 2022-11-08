@@ -1,7 +1,6 @@
-package com.notbadcode.explorewithme.user.model;
+package com.notbadcode.explorewithme.admin.model;
 
 import com.notbadcode.explorewithme.event.model.Event;
-import com.notbadcode.explorewithme.user.model.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

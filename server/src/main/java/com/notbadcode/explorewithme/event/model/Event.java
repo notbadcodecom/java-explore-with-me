@@ -2,7 +2,7 @@ package com.notbadcode.explorewithme.event.model;
 
 
 import com.notbadcode.explorewithme.category.EventCategory;
-import com.notbadcode.explorewithme.user.model.User;
+import com.notbadcode.explorewithme.admin.model.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
