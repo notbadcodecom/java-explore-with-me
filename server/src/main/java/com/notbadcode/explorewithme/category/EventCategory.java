@@ -7,8 +7,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "categories", schema = "public")
@@ -18,6 +19,6 @@ public class EventCategory {
     @Column(name = "category_id", nullable = false)
     Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     String name;
 }
