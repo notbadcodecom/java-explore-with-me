@@ -1,12 +1,9 @@
-package com.notbadcode.explorewithme.admin.service;
+package com.notbadcode.explorewithme.user;
 
-import com.notbadcode.explorewithme.admin.dto.UserDto;
-import com.notbadcode.explorewithme.admin.dto.UserShortDto;
-import com.notbadcode.explorewithme.admin.mapper.UserMapper;
-import com.notbadcode.explorewithme.admin.model.User;
-import com.notbadcode.explorewithme.admin.storage.AdminUserRepository;
+import com.notbadcode.explorewithme.user.dto.UserDto;
+import com.notbadcode.explorewithme.user.dto.UserShortDto;
 import com.notbadcode.explorewithme.error.NotFoundException;
-import com.notbadcode.explorewithme.util.FromSizeRequest;
+import com.notbadcode.explorewithme.util.SizeRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +18,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-public class AdminUserService {
-    private final AdminUserRepository userRepository;
+public class UserService {
+    private final UserRepository userRepository;
 
     @Transactional
     public UserDto createUser(UserShortDto userDto) {
@@ -33,23 +30,23 @@ public class AdminUserService {
 
     @Transactional
     public void deleteUser(Long userId) {
-        User user = getUserOr404Error(userId);
-        userRepository.delete(user);
+        userRepository.delete(getUserOr404Error(userId));
         log.debug("User id={} has been deleted", userId);
     }
 
-    public List<UserDto> findAllUsers(Optional<List<Long>> ids, int from, int size) {
-        Pageable pageable = FromSizeRequest.of(from, size);
-        return ids.map(longs -> userRepository.findByIdInOrderByIdAsc(longs, pageable).stream()
+    public List<UserDto> findUsers(Optional<List<Long>> ids, int from, int size) {
+        Pageable pageable = SizeRequest.from(from, size);
+        List<UserDto> users = ids.map(longs -> userRepository.findByIdInOrderByIdAsc(longs, pageable).stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList())).orElseGet(() -> userRepository.findAll(pageable).stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList()));
+        log.debug("Found {} users", users.size());
+        return users;
     }
 
-
-    private User getUserOr404Error(Long userId) {
-        log.debug("Fi id={} has been deleted", userId);
+    public User getUserOr404Error(Long userId) {
+        log.debug("Load user id={}", userId);
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id=" + userId + " was not found"));
     }

@@ -1,4 +1,4 @@
-package com.notbadcode.explorewithme.admin.model;
+package com.notbadcode.explorewithme.user;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

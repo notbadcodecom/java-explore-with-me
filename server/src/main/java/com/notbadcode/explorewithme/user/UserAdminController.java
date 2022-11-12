@@ -1,8 +1,7 @@
-package com.notbadcode.explorewithme.admin.controller;
+package com.notbadcode.explorewithme.user;
 
-import com.notbadcode.explorewithme.admin.dto.UserDto;
-import com.notbadcode.explorewithme.admin.dto.UserShortDto;
-import com.notbadcode.explorewithme.admin.service.AdminUserService;
+import com.notbadcode.explorewithme.user.dto.UserDto;
+import com.notbadcode.explorewithme.user.dto.UserShortDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,8 +22,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Admin: Пользователи", description = "API для работы с пользователями")
-public class AdminUserController {
-    private final AdminUserService userService;
+public class UserAdminController {
+    private final UserService userService;
 
     @Operation(summary = "Добавление нового пользователя")
     @ApiResponse(responseCode = "201", description = "Пользователь зарегистрирован",
@@ -52,12 +51,12 @@ public class AdminUserController {
                     array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))})
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> findAllUsers(
+    public List<UserDto> findUsers(
             @RequestParam(name = "ids", required = false) Optional<List<Long>> ids,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "20") int size
     ) {
         log.info("GET /admin/users");
-        return userService.findAllUsers(ids, from, size);
+        return userService.findUsers(ids, from, size);
     }
 }

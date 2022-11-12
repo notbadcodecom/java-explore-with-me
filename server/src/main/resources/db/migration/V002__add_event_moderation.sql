@@ -1,2 +1,0 @@
-ALTER TABLE events ADD COLUMN IF NOT EXISTS moderation BOOLEAN DEFAULT FALSE;
-ALTER TABLE requests_participation DROP COLUMN IF EXISTS moderation;

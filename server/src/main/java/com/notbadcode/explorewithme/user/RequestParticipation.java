@@ -1,4 +1,4 @@
-package com.notbadcode.explorewithme.admin.model;
+package com.notbadcode.explorewithme.user;
 
 import com.notbadcode.explorewithme.event.model.Event;
 import lombok.*;
