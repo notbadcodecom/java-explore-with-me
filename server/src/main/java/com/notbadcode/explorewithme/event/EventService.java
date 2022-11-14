@@ -32,8 +32,7 @@ public class EventService {
     private final LocationRepository locationRepository;
     private final UserService userService;
     private final CategoryService categoryService;
-    @Value("${spring.jackson.date-format}") String format;
-    private final DateTimeFormatter formatter =  DateTimeFormatter.ofPattern(format);
+    @Value("${spring.jackson.date-format}") private String format;
 
     @Transactional
     public EventFullDto createEvent(NewEventDto eventDto, Long userId) {
@@ -152,7 +151,6 @@ public class EventService {
         if (!event.getState().equals(EventState.PENDING)) {
             throw new BadRequestException("Event id={" + eventId + "} is not pending moderation");
         }
-
         LocalDateTime minStart = LocalDateTime.now().plusHours(minHoursBeforePublication);
         if (event.getEventDate().isBefore(minStart)) {
             throw new BadRequestException("Event datetime does not meet the conditions for publication");
@@ -192,12 +190,7 @@ public class EventService {
                     .collect(Collectors.toList())));
         });
         categoriesOptional.ifPresent(categories -> builder.and(QEvent.event.category.id.in(categories)));
-        rangeStartOptional.ifPresent(start -> {
-            builder.and(QEvent.event.eventDate.after(LocalDateTime.parse(start, formatter)));
-        });
-        rangeEndOptional.ifPresent(end -> {
-            builder.and(QEvent.event.eventDate.before(LocalDateTime.parse(end, formatter)));
-        });
+        addStartEndToBooleanBuilder(rangeStartOptional, rangeEndOptional, builder);
         return EventMapper.toEventFullDto(eventRepository.findAll(builder, pageable));
     }
 
@@ -219,12 +212,7 @@ public class EventService {
         });
         categoriesOptional.ifPresent(categories -> builder.and(QEvent.event.category.id.in(categories)));
         paidOptional.ifPresent(paid -> builder.and(QEvent.event.paid.eq(paid)));
-        rangeStartOptional.ifPresent(start -> {
-            builder.and(QEvent.event.eventDate.after(LocalDateTime.parse(start, formatter)));
-        });
-        rangeEndOptional.ifPresent(end -> {
-            builder.and(QEvent.event.eventDate.before(LocalDateTime.parse(end, formatter)));
-        });
+        addStartEndToBooleanBuilder(rangeStartOptional, rangeEndOptional, builder);
         onlyAvailableOptional.ifPresent((available) -> {
             builder.and(QEvent.event.participantLimit.gt(QEvent.event.participants.size()));
         });
@@ -233,5 +221,19 @@ public class EventService {
             pageable[0] = SizeRequest.from(from, size, Sort.by(sort.name()));
         });
         return EventMapper.toEventShortDto(eventRepository.findAll(builder, pageable[0]));
+    }
+
+    private void addStartEndToBooleanBuilder(
+            Optional<String> rangeStartOptional,
+            Optional<String> rangeEndOptional,
+            BooleanBuilder builder
+    ) {
+        DateTimeFormatter formatter =  DateTimeFormatter.ofPattern(format);
+        rangeStartOptional.ifPresent(start -> {
+            builder.and(QEvent.event.eventDate.after(LocalDateTime.parse(start, formatter)));
+        });
+        rangeEndOptional.ifPresent(end -> {
+            builder.and(QEvent.event.eventDate.before(LocalDateTime.parse(end, formatter)));
+        });
     }
 }

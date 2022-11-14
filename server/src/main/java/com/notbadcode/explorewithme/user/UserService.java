@@ -1,8 +1,8 @@
 package com.notbadcode.explorewithme.user;
 
+import com.notbadcode.explorewithme.error.NotFoundException;
 import com.notbadcode.explorewithme.user.dto.UserDto;
 import com.notbadcode.explorewithme.user.dto.UserShortDto;
-import com.notbadcode.explorewithme.error.NotFoundException;
 import com.notbadcode.explorewithme.util.SizeRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
