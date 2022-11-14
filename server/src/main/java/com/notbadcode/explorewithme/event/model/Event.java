@@ -72,12 +72,10 @@ public class Event {
     @Column(name = "participant_limit")
     Integer participantLimit;
 
-    @WhereJoinTable(clause = "confirmed='TRUE'")
+    @WhereJoinTable(clause = "status='CONFIRMED'")
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "requests_participation",
+    @JoinTable(name = "requests_participation",
             joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     List<User> participants = new ArrayList<>();
 }
