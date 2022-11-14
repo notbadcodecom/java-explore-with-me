@@ -10,9 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 				version = "1.0",
 				description = "Service for share events and look for participants for events"))
 @SpringBootApplication
-public class ExploreWithMeApplication {
+public class ExploreWithMeServer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ExploreWithMeApplication.class, args);
+		SpringApplication.run(ExploreWithMeServer.class, args);
 	}
 }

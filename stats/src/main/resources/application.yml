@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9090
 spring:
   jpa:
     hibernate:
@@ -12,11 +12,9 @@ spring:
   sql:
     init:
       mode: always
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/ewm
+    url: jdbc:postgresql://localhost:5432/stats
     username: ewm
     password: ewm
 logging:

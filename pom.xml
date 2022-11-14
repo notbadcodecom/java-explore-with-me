@@ -25,6 +25,7 @@
 
 	<modules>
 		<module>server</module>
+		<module>stats</module>
 	</modules>
 
 	<build>

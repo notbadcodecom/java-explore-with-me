@@ -1,10 +1,10 @@
 package com.notbadcode.explorewithme.event;
 
-import com.notbadcode.explorewithme.category.CategoryDto;
 import com.notbadcode.explorewithme.event.dto.EventFullDto;
 import com.notbadcode.explorewithme.event.dto.EventShortDto;
 import com.notbadcode.explorewithme.event.dto.LocationDto;
 import com.notbadcode.explorewithme.event.dto.NewEventDto;
+import com.notbadcode.explorewithme.category.CategoryDto;
 import com.notbadcode.explorewithme.event.model.Event;
 import com.notbadcode.explorewithme.event.model.EventState;
 import com.notbadcode.explorewithme.event.model.Location;
