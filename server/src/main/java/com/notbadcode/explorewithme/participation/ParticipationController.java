@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/users/{userId}/requests")
+@RequestMapping(path = "/users/{userId}")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Private: Запросы на участие", description = "Закрытый API для работы с запросами на участие в событиях")
@@ -26,7 +26,7 @@ public class ParticipationController {
     @ApiResponse(responseCode = "200", description = "Найдены запросы на участие",
             content = {@Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = ParticipationDto.class)))})
-    @GetMapping
+    @GetMapping("/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationDto> findAllByParticipantId(@PathVariable Long userId) {
         log.info("GET /users/{}/requests", userId);
@@ -37,7 +37,7 @@ public class ParticipationController {
     @ApiResponse(responseCode = "200", description = "Заявка отменена",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ParticipationDto.class))})
-    @PatchMapping("/{requestId}/cancel")
+    @PatchMapping("/requests/{requestId}/cancel")
     @ResponseStatus(HttpStatus.OK)
     public ParticipationDto cancelRequestByUser(@PathVariable Long userId, @PathVariable Long requestId) {
         log.info("POST /users/{}/requests/{}/cancel", userId, requestId);
@@ -53,7 +53,7 @@ public class ParticipationController {
     @ApiResponse(responseCode = "201", description = "Заявка создана",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ParticipationDto.class))})
-    @PostMapping
+    @PostMapping("/requests")
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationDto createRequest(@PathVariable Long userId, Optional<Long> eventIdOptional) {
         log.info("POST /users/{}/requests?eventId={}", userId, eventIdOptional.get());
@@ -64,7 +64,7 @@ public class ParticipationController {
     @ApiResponse(responseCode = "200", description = "Найдены запросы на участие",
             content = {@Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = ParticipationDto.class)))})
-    @GetMapping("/{eventId}/requests")
+    @GetMapping("/events/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationDto> findAllByInitiatorId(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("GET /users/{}/events/{}/requests", userId, eventId);
@@ -80,7 +80,7 @@ public class ParticipationController {
     @ApiResponse(responseCode = "200", description = "Заявка подтверждена",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ParticipationDto.class))})
-    @PatchMapping("/{eventId}/requests/{reqId}/confirm")
+    @PatchMapping("/events/{eventId}/requests/{reqId}/confirm")
     @ResponseStatus(HttpStatus.OK)
     public ParticipationDto confirmParticipationRequest(
             @PathVariable Long userId,
@@ -95,7 +95,7 @@ public class ParticipationController {
     @ApiResponse(responseCode = "200", description = "Заявка отклонена",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ParticipationDto.class))})
-    @PatchMapping("/{eventId}/requests/{reqId}/reject")
+    @PatchMapping("/events/{eventId}/requests/{reqId}/reject")
     @ResponseStatus(HttpStatus.OK)
     public ParticipationDto rejectParticipationRequest(
             @PathVariable Long userId,

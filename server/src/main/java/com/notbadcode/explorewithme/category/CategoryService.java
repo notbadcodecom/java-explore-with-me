@@ -2,11 +2,15 @@ package com.notbadcode.explorewithme.category;
 
 import com.notbadcode.explorewithme.error.NotFoundException;
 import com.notbadcode.explorewithme.event.EventService;
+import com.notbadcode.explorewithme.util.SizeRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -51,5 +55,16 @@ public class CategoryService {
         categoryRepository.save(category);
         log.debug("Category id={} has been updated", category.getId());
         return CategoryMapper.toCategoryDto(category);
+    }
+
+    public List<CategoryDto> findAllCategories(int from, int size) {
+        Page<EventCategory> categories = categoryRepository.findAll(SizeRequest.of(from, size));
+        log.debug("Found {} categories", categories.getSize());
+        return CategoryMapper.toCategoryDto(categories);
+    }
+
+    public CategoryDto findCategoriesById(Long catId) {
+        log.debug("Category id={} was found", catId);
+        return CategoryMapper.toCategoryDto(getCategoryOr404Error(catId));
     }
 }

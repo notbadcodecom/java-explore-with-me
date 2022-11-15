@@ -1,12 +1,16 @@
-package com.notbadcode.explorewithme.compilation.models;
+package com.notbadcode.explorewithme.compilation;
 
+import com.notbadcode.explorewithme.event.model.Event;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -23,4 +27,10 @@ public class Compilation {
 
     @Column(name = "pinned")
     Boolean pinned;
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "events_compilations",
+            joinColumns = @JoinColumn(name = "compilation_id"),
+    inverseJoinColumns = @JoinColumn(name = "event_id"))
+    List<Event> events = new ArrayList<>();
 }
