@@ -13,12 +13,12 @@ public class SizeRequest extends PageRequest {
         offset = from;
     }
 
-    public static SizeRequest from(int from, int size) {
+    public static SizeRequest of(int from, int size) {
         isCorrectOr400Error(from, size);
         return new SizeRequest(from, size, Sort.unsorted());
     }
 
-    public static SizeRequest from(int from, int size, Sort sort) {
+    public static SizeRequest of(int from, int size, Sort sort) {
         isCorrectOr400Error(from, size);
         return new SizeRequest(from, size, sort);
     }

@@ -85,7 +85,7 @@ public class EventService {
 
     public List<EventShortDto> findEventsByUserId(Long userId, int from, int size) {
         userService.getUserOr404Error(userId);
-        Pageable pageable = SizeRequest.from(from, size);
+        Pageable pageable = SizeRequest.of(from, size);
         List<Event> events = eventRepository.findByInitiator_IdOrderByEventDateDesc(userId, pageable);
         log.debug("Find {} events", events.size());
         return EventMapper.toEventShortDto(events);
@@ -180,7 +180,7 @@ public class EventService {
             int from,
             int size
     ) {
-        Pageable pageable = SizeRequest.from(from, size);
+        Pageable pageable = SizeRequest.of(from, size);
         BooleanBuilder builder = new BooleanBuilder();
         usersOptional.ifPresent(users -> builder.and(QEvent.event.initiator.id.in(users)));
         statesOptional.ifPresent(states -> {
@@ -191,6 +191,7 @@ public class EventService {
         });
         categoriesOptional.ifPresent(categories -> builder.and(QEvent.event.category.id.in(categories)));
         addStartEndToBooleanBuilder(rangeStartOptional, rangeEndOptional, builder);
+        log.debug("Events found by params");
         return EventMapper.toEventFullDto(eventRepository.findAll(builder, pageable));
     }
 
@@ -216,11 +217,17 @@ public class EventService {
         onlyAvailableOptional.ifPresent((available) -> {
             builder.and(QEvent.event.participantLimit.gt(QEvent.event.participants.size()));
         });
-        final Pageable[] pageable = {SizeRequest.from(from, size)};
+        final Pageable[] pageable = {SizeRequest.of(from, size)};
         sortOptional.flatMap(s -> Optional.ofNullable(EventSort.from(s))).ifPresent(sort -> {
-            pageable[0] = SizeRequest.from(from, size, Sort.by(sort.name()));
+            pageable[0] = SizeRequest.of(from, size, Sort.by(sort.name()));
         });
+        log.debug("Events found by params");
         return EventMapper.toEventShortDto(eventRepository.findAll(builder, pageable[0]));
+    }
+
+    public List<Event> findEventsByIds(List<Long> ids) {
+        log.debug("Events found by ids");
+        return eventRepository.findByIdIn(ids);
     }
 
     private void addStartEndToBooleanBuilder(

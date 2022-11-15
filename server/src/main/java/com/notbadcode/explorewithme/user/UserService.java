@@ -35,7 +35,7 @@ public class UserService {
     }
 
     public List<UserDto> findUsers(Optional<List<Long>> ids, int from, int size) {
-        Pageable pageable = SizeRequest.from(from, size);
+        Pageable pageable = SizeRequest.of(from, size);
         List<UserDto> users = ids.map(longs -> userRepository.findByIdInOrderByIdAsc(longs, pageable).stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList())).orElseGet(() -> userRepository.findAll(pageable).stream()
