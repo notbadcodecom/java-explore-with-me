@@ -29,5 +29,5 @@ public class EventShortDto {
 
     Boolean paid;
 
-    int views;
+    Long views;
 }

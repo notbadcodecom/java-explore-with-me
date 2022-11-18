@@ -1,4 +1,4 @@
-package com.notbadcode.explorewithme.event.model;
+package com.notbadcode.explorewithme.event;
 
 public enum EventState {
     PENDING,

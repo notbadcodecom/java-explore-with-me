@@ -1,6 +1,6 @@
 package com.notbadcode.explorewithme.compilation;
 
-import com.notbadcode.explorewithme.event.model.Event;
+import com.notbadcode.explorewithme.event.Event;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

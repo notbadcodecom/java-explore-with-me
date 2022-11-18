@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
-    List<Participation> findByEvent_Participants_Id(Long id);
+    List<Participation> findByParticipant_Id(Long id);
 
     boolean existsByEvent_IdAndParticipant_Id(Long eventId, Long userId);
 

@@ -1,4 +1,4 @@
-package com.notbadcode.explorewithme.event.model;
+package com.notbadcode.explorewithme.event;
 
 
 import com.notbadcode.explorewithme.category.EventCategory;
@@ -55,9 +55,11 @@ public class Event {
     @JoinColumn(name = "initiator_id", referencedColumnName = "user_id")
     User initiator;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "location_id")
-    Location location;
+    @Column(name = "lat")
+    Double lat;
+
+    @Column(name = "lon")
+    Double lon;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
@@ -78,4 +80,7 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     List<User> participants = new ArrayList<>();
+
+    @Transient
+    Long views;
 }

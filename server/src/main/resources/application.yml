@@ -1,6 +1,8 @@
 server:
   port: 8080
 spring:
+  application:
+    name: ewm-server
   jpa:
     hibernate:
       ddl-auto: none
@@ -21,15 +23,26 @@ spring:
     password: ewm
 logging:
   level:
-    com.notbadcode: DEBUG
-    org.springframework.web: DEBUG
-    org.hibernate: ERROR
+    com.notbadcode: INFO
+    org.springframework.web: INFO
+    org.hibernate: INFO
 springdoc:
   api-docs:
     path: /api-docs
   swagger-ui:
     path: /swagger.html
     defaultModelsExpandDepth: -1
+ewm-config:
+  event:
+    service:
+      hoursBeforePublication: 1
+  stats:
+    server:
+      url: http://localhost:9090
+    client:
+      hit-uri: /hit
+      stats-uri: /stats
+      events-uri: /events
 ---
 spring:
   config:
@@ -37,6 +50,6 @@ spring:
       on-profile: "test"
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:emv
-    username: emv
-    password: emv
+    url: jdbc:h2:mem:ewm
+    username: ewm
+    password: ewm

@@ -1,5 +1,6 @@
 package com.notbadcode.explorewithme.participation;
 
+import com.notbadcode.explorewithme.util.ControllerLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +30,8 @@ public class ParticipationController {
                     array = @ArraySchema(schema = @Schema(implementation = ParticipationDto.class)))})
     @GetMapping("/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationDto> findAllByParticipantId(@PathVariable Long userId) {
-        log.info("GET /users/{}/requests", userId);
+    public List<ParticipationDto> findAllByParticipantId(@PathVariable Long userId, HttpServletRequest request) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return participationService.findAllByParticipantId(userId);
     }
 
@@ -39,8 +41,12 @@ public class ParticipationController {
                     schema = @Schema(implementation = ParticipationDto.class))})
     @PatchMapping("/requests/{requestId}/cancel")
     @ResponseStatus(HttpStatus.OK)
-    public ParticipationDto cancelRequestByUser(@PathVariable Long userId, @PathVariable Long requestId) {
-        log.info("POST /users/{}/requests/{}/cancel", userId, requestId);
+    public ParticipationDto cancelRequestByUser(
+            @PathVariable Long userId,
+            @PathVariable Long requestId,
+            HttpServletRequest request
+    ) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return participationService.cancelRequestByUser(userId, requestId);
     }
 
@@ -50,14 +56,18 @@ public class ParticipationController {
                     "нельзя участвовать в неопубликованном событии,\n" +
                     "если у события достигнут лимит запросов на участие, вовращается ошибка\n" +
                     "если для события отключена модерация запросов на участие, то запрос автоматически подтверждается")
-    @ApiResponse(responseCode = "201", description = "Заявка создана",
+    @ApiResponse(responseCode = "200", description = "Заявка создана",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ParticipationDto.class))})
     @PostMapping("/requests")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ParticipationDto createRequest(@PathVariable Long userId, Optional<Long> eventIdOptional) {
-        log.info("POST /users/{}/requests?eventId={}", userId, eventIdOptional.get());
-        return participationService.createParticipation(userId, eventIdOptional);
+    @ResponseStatus(HttpStatus.OK)
+    public ParticipationDto createRequest(
+            @PathVariable Long userId,
+            @RequestParam Optional<Long> eventId,
+            HttpServletRequest request
+    ) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
+        return participationService.createParticipation(userId, eventId);
     }
 
     @Operation(summary = "Получение информации о запросах на участие в событии текущего пользователя")
@@ -66,8 +76,12 @@ public class ParticipationController {
                     array = @ArraySchema(schema = @Schema(implementation = ParticipationDto.class)))})
     @GetMapping("/events/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationDto> findAllByInitiatorId(@PathVariable Long userId, @PathVariable Long eventId) {
-        log.info("GET /users/{}/events/{}/requests", userId, eventId);
+    public List<ParticipationDto> findAllByInitiatorId(
+            @PathVariable Long userId,
+            @PathVariable Long eventId,
+            HttpServletRequest request
+    ) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return participationService.findAllByInitiatorId(userId, eventId);
     }
 
@@ -85,9 +99,10 @@ public class ParticipationController {
     public ParticipationDto confirmParticipationRequest(
             @PathVariable Long userId,
             @PathVariable Long eventId,
-            @PathVariable Long reqId
+            @PathVariable Long reqId,
+            HttpServletRequest request
     ) {
-        log.info("GET /users/{}/events/{}/requests{}/confirm", userId, eventId, reqId);
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return participationService.confirmParticipationRequest(userId, eventId, reqId);
     }
 
@@ -100,9 +115,10 @@ public class ParticipationController {
     public ParticipationDto rejectParticipationRequest(
             @PathVariable Long userId,
             @PathVariable Long eventId,
-            @PathVariable Long reqId
+            @PathVariable Long reqId,
+            HttpServletRequest request
     ) {
-        log.info("GET /users/{}/events/{}/requests{}/reject", userId, eventId, reqId);
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return participationService.rejectParticipationRequest(userId, eventId, reqId);
     }
 }
