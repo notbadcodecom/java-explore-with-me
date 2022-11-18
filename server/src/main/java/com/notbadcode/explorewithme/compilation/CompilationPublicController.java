@@ -1,6 +1,7 @@
 package com.notbadcode.explorewithme.compilation;
 
 import com.notbadcode.explorewithme.compilation.dto.CompilationDto;
+import com.notbadcode.explorewithme.util.ControllerLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +34,10 @@ public class CompilationPublicController {
     public List<CompilationDto> findCompilationByParams(
             @RequestParam Optional<Boolean> pinned,
             @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            HttpServletRequest request
     ) {
-        log.info("GET /compilations");
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return compilationService.findCompilationByParams(pinned, from, size);
     }
 
@@ -44,8 +47,8 @@ public class CompilationPublicController {
                     schema = @Schema(implementation = CompilationDto.class))})
     @GetMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto findCompilationById(@PathVariable Long compId) {
-        log.info("GET /compilations/{}", compId);
+    public CompilationDto findCompilationById(@PathVariable Long compId, HttpServletRequest request) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return compilationService.findCompilationById(compId);
     }
 }

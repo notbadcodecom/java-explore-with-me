@@ -2,7 +2,7 @@ package com.notbadcode.explorewithme.compilation;
 
 import com.notbadcode.explorewithme.compilation.dto.CompilationDto;
 import com.notbadcode.explorewithme.compilation.dto.NewCompilationDto;
-import com.notbadcode.explorewithme.event.model.Event;
+import com.notbadcode.explorewithme.event.Event;
 import com.notbadcode.explorewithme.event.EventMapper;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;

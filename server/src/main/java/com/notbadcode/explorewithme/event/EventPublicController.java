@@ -2,6 +2,7 @@ package com.notbadcode.explorewithme.event;
 
 import com.notbadcode.explorewithme.event.dto.EventFullDto;
 import com.notbadcode.explorewithme.event.dto.EventShortDto;
+import com.notbadcode.explorewithme.util.ControllerLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,7 @@ public class EventPublicController {
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> findEventsByParams(
+            HttpServletRequest request,
             @RequestParam Optional<String> text,
             @RequestParam Optional<List<Long>> categories,
             @RequestParam Optional<Boolean> paid,
@@ -48,9 +51,9 @@ public class EventPublicController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "20") int size
     ) {
-        log.info("GET /events");
-        return eventService.findEventsByParams(text, categories, paid,
-                rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+        log.info("{}", ControllerLog.createUrlInfo(request));
+        return eventService.findEventsByParams(request, text, categories,
+                paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
 
     @Operation(summary = "Получение подробной информации об опубликованном событии",
@@ -61,8 +64,8 @@ public class EventPublicController {
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = EventFullDto.class))})
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto findEventById(@PathVariable Long eventId) {
-        log.info("GET /events/{}", eventId);
-        return eventService.findEventById(eventId);
+    public EventFullDto findEventById(@PathVariable Long eventId, HttpServletRequest request) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
+        return eventService.findEventById(request, eventId);
     }
 }

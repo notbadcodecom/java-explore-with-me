@@ -6,9 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-@OpenAPIDefinition(info = @Info(title = "Explore With Me API definition",
+@OpenAPIDefinition(info = @Info(title = "EWM Stat service API definition",
 				version = "1.0",
-				description = "Service for share events and look for participants for events"))
+				description = "ExploreWithMe statistics service"))
 @SpringBootApplication
 public class ExploreWithMeStats {
 

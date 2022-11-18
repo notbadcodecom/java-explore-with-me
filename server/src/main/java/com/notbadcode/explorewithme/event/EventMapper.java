@@ -5,12 +5,8 @@ import com.notbadcode.explorewithme.event.dto.EventShortDto;
 import com.notbadcode.explorewithme.event.dto.LocationDto;
 import com.notbadcode.explorewithme.event.dto.NewEventDto;
 import com.notbadcode.explorewithme.category.CategoryDto;
-import com.notbadcode.explorewithme.event.model.Event;
-import com.notbadcode.explorewithme.event.model.EventState;
-import com.notbadcode.explorewithme.event.model.Location;
 import com.notbadcode.explorewithme.user.UserMapper;
 import lombok.experimental.UtilityClass;
-import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +25,8 @@ public class EventMapper {
                 .moderation(eventDto.isRequestModeration())
                 .title(eventDto.getTitle())
                 .state(EventState.PENDING)
+                .lat(eventDto.getLocation().getLat())
+                .lon(eventDto.getLocation().getLon())
                 .build();
     }
 
@@ -52,14 +50,13 @@ public class EventMapper {
                         .id(event.getCategory().getId())
                         .name(event.getCategory().getName())
                         .build())
-                .location(toLocationDto(event.getLocation()))
+                .location(LocationDto.builder()
+                        .lat(event.getLat())
+                        .lon(event.getLon())
+                        .build())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-                .views(0) // todo подгружать просмотры с сервера статистики
+                .views(event.getViews())
                 .build();
-    }
-
-    public static List<EventFullDto> toEventFullDto(Page<Event> event) {
-        return event.stream().map(EventMapper::toEventFullDto).collect(Collectors.toList());
     }
 
     public static EventShortDto toEventShortDto(Event event) {
@@ -77,7 +74,7 @@ public class EventMapper {
                         .name(event.getCategory().getName())
                         .build())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-                .views(0) // todo подгружать просмотры с сервера статистики
+                .views(event.getViews())
                 .build();
     }
 
@@ -85,21 +82,7 @@ public class EventMapper {
         return event.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
     }
 
-    public static List<EventShortDto> toEventShortDto(Page<Event> event) {
-        return event.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
-    }
-
-    public static Location toLocation(LocationDto locationDto) {
-        return Location.builder()
-                .lat(locationDto.getLat())
-                .lon(locationDto.getLon())
-                .build();
-    }
-
-    public static LocationDto toLocationDto(Location location) {
-        return LocationDto.builder()
-                .lat(location.getLat())
-                .lon(location.getLon())
-                .build();
+    public static List<EventFullDto> toEventFullDto(List<Event> event) {
+        return event.stream().map(EventMapper::toEventFullDto).collect(Collectors.toList());
     }
 }

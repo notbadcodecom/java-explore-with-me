@@ -1,5 +1,6 @@
 package com.notbadcode.explorewithme.category;
 
+import com.notbadcode.explorewithme.util.ControllerLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -29,9 +31,10 @@ public class CategoryPublicController {
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> findAllCategories(
             @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            HttpServletRequest request
     ) {
-        log.info("GET /categories");
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return categoryService.findAllCategories(from, size);
     }
 
@@ -41,8 +44,8 @@ public class CategoryPublicController {
                     schema = @Schema(implementation = CategoryDto.class))})
     @GetMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto findCategoriesById(@PathVariable Long catId) {
-        log.info("GET /categories/{}", catId);
+    public CategoryDto findCategoriesById(@PathVariable Long catId, HttpServletRequest request) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return categoryService.findCategoriesById(catId);
     }
 }

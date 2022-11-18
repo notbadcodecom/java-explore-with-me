@@ -2,6 +2,7 @@ package com.notbadcode.explorewithme.event;
 
 import com.notbadcode.explorewithme.event.dto.AdminUpdateEventDto;
 import com.notbadcode.explorewithme.event.dto.EventFullDto;
+import com.notbadcode.explorewithme.util.ControllerLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,9 +39,11 @@ public class EventAdminController {
             @RequestParam Optional<String> rangeStart,
             @RequestParam Optional<String> rangeEnd,
             @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            HttpServletRequest request
     ) {
-        log.info("GET /admin/events (admin searching)");
+
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return eventService.findEventsByParams(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
@@ -49,8 +53,12 @@ public class EventAdminController {
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = EventFullDto.class))})
     @PutMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto updateEventByAdmin(@RequestBody AdminUpdateEventDto eventDto, @PathVariable Long eventId) {
-        log.info("PUT /admin/events/{} : {}", eventId, eventDto);
+    public EventFullDto updateEventByAdmin(
+            @RequestBody AdminUpdateEventDto eventDto,
+            @PathVariable Long eventId,
+            HttpServletRequest request
+    ) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return eventService.updateEventByAdmin(eventId, eventDto);
     }
 
@@ -61,8 +69,8 @@ public class EventAdminController {
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = EventFullDto.class))})
     @PatchMapping("/{eventId}/publish")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto publishEventById(@PathVariable Long eventId) {
-        log.info("PATCH /admin/events/{}/publish", eventId);
+    public EventFullDto publishEventById(@PathVariable Long eventId, HttpServletRequest request) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return eventService.publishEventById(eventId);
     }
 
@@ -71,8 +79,8 @@ public class EventAdminController {
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = EventFullDto.class))})
     @PatchMapping("/{eventId}/reject")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto rejectEventById(@PathVariable Long eventId) {
-        log.info("PATCH /admin/events/{}/reject", eventId);
+    public EventFullDto rejectEventById(@PathVariable Long eventId, HttpServletRequest request) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return eventService.rejectEventById(eventId);
     }
 }

@@ -2,7 +2,7 @@ package com.notbadcode.explorewithme.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.notbadcode.explorewithme.category.CategoryDto;
-import com.notbadcode.explorewithme.event.model.EventState;
+import com.notbadcode.explorewithme.event.EventState;
 import com.notbadcode.explorewithme.user.dto.UserShortDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,5 +46,5 @@ public class EventFullDto {
 
     int participantLimit;
 
-    int views;
+    Long views;
 }

@@ -1,5 +1,6 @@
 package com.notbadcode.explorewithme.category;
 
+import com.notbadcode.explorewithme.util.ControllerLog;
 import com.notbadcode.explorewithme.util.Create;
 import com.notbadcode.explorewithme.util.Update;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping(path = "/admin/categories")
 @RequiredArgsConstructor
@@ -22,12 +25,15 @@ public class CategoryAdminController {
     private final CategoryService categoryService;
 
     @Operation(summary = "Добавление новой категории", description = "Имя категории уникально")
-    @ApiResponse(responseCode = "201", description = "Категория добавлена",
+    @ApiResponse(responseCode = "200", description = "Категория добавлена",
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDto.class))})
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto createCategory(@Validated(Create.class) @RequestBody CategoryDto categoryDto) {
-        log.info("POST /admin/categories : {}", categoryDto);
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDto createCategory(
+            @Validated(Create.class) @RequestBody CategoryDto categoryDto,
+            HttpServletRequest request
+    ) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return categoryService.createCategory(categoryDto);
     }
 
@@ -35,17 +41,20 @@ public class CategoryAdminController {
     @ApiResponse(responseCode = "200", description = "Данные категории изменены")
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto updateCategory(@Validated(Update.class) @RequestBody CategoryDto categoryDto) {
-        log.info("DELETE /admin/categories : {}", categoryDto);
+    public CategoryDto updateCategory(
+            @Validated(Update.class) @RequestBody CategoryDto categoryDto,
+            HttpServletRequest request
+    ) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         return categoryService.updateCategory(categoryDto);
     }
 
     @Operation(summary = "Удаление категории", description = "C категорией не должно быть связано ни одного события")
-    @ApiResponse(responseCode = "204", description = "Категория удалена")
+    @ApiResponse(responseCode = "200", description = "Категория удалена")
     @DeleteMapping("/{categoryId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long categoryId) {
-        log.info("DELETE /admin/categories/{}", categoryId);
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable Long categoryId, HttpServletRequest request) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
         categoryService.deleteCategory(categoryId);
     }
 }

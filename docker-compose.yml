@@ -3,31 +3,48 @@ services:
   stats-server:
     build: ./stats
     container_name: stats_server
+    restart: always
     ports:
       - "9090:9090"
     depends_on:
-      - db
+      - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/stats
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
+      - POSTGRES_USER=ewm
+      - POSTGRES_PASSWORD=ewm
+  stats-db:
+    image: postgres:13.9-alpine3.16
+    container_name: stats_db
+    restart: always
+    volumes:
+      - /var/lib/postgresql/data/
+    ports:
+      - "6542:5432"
+    environment:
+      POSTGRES_DB: stats
+      POSTGRES_USER: ewm
+      POSTGRES_PASSWORD: ewm
   ewm-service:
     build: ./server
     container_name: ewm_server
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      - ewm-db
       - stats-server
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ewm
-      - STATS_SERVER_URL=http://stats-server:9090
-  db:
-    build: ./db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
+      - EWM_CONFIG_STATS_SERVER_URL=http://stats-server:9090
+      - POSTGRES_USER=ewm
+      - POSTGRES_PASSWORD=ewm
+  ewm-db:
+    image: postgres:13.9-alpine3.16
     container_name: ewm_db
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
       - /var/lib/postgresql/data/
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_MULTIPLE_DATABASES=ewm,ewm;stats,ewm
-      - POSTGRES_PASSWORD=ewm
+      POSTGRES_DB: ewm
+      POSTGRES_USER: ewm
+      POSTGRES_PASSWORD: ewm
