@@ -2,7 +2,6 @@ package com.notbadcode.explorewithme.compilation;
 
 import com.notbadcode.explorewithme.event.Event;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,26 +10,25 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "compilations", schema = "public")
 public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "compilation_id", nullable = false)
-    Long id;
+    private Long id;
 
     @Column(name = "title", nullable = false)
-    String title;
+    private String title;
 
     @Column(name = "pinned")
-    Boolean pinned;
+    private Boolean pinned;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "events_compilations",
             joinColumns = @JoinColumn(name = "compilation_id"),
-    inverseJoinColumns = @JoinColumn(name = "event_id"))
-    List<Event> events = new ArrayList<>();
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    private List<Event> events = new ArrayList<>();
 }

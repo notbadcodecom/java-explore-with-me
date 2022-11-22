@@ -1,5 +1,7 @@
 package com.notbadcode.explorewithme.event;
 
+import com.notbadcode.explorewithme.error.BadRequestException;
+
 public enum EventSort {
     EVENT_DATE,
     VIEWS;
@@ -10,6 +12,6 @@ public enum EventSort {
                 return state;
             }
         }
-        return null;
+        throw new BadRequestException("No field for sorting");
     }
 }

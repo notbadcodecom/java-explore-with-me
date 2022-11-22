@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(Long userId) {
-        userRepository.delete(getUserOr404Error(userId));
+        userRepository.delete(getUserById(userId));
         log.debug("User id={} has been deleted", userId);
     }
 
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserOr404Error(Long userId) {
+    public User getUserById(Long userId) {
         log.debug("Load user id={}", userId);
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id=" + userId + " was not found"));

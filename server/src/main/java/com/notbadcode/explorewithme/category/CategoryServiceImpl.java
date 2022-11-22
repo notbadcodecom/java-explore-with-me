@@ -1,11 +1,9 @@
 package com.notbadcode.explorewithme.category;
 
 import com.notbadcode.explorewithme.error.NotFoundException;
-import com.notbadcode.explorewithme.event.EventService;
 import com.notbadcode.explorewithme.util.SizeRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,19 +12,13 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-    private final EventService eventService;
-
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, @Lazy EventService eventService) {
-        this.categoryRepository = categoryRepository;
-        this.eventService = eventService;
-    }
 
     @Override
-    public EventCategory getCategoryOr404Error(Long categoryId) {
+    public EventCategory getCategoryById(Long categoryId) {
         log.debug("Load category id={}", categoryId);
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Category with id=" + categoryId + " was not found"));
@@ -43,8 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void deleteCategory(Long categoryId) {
-        EventCategory category = getCategoryOr404Error(categoryId);
-        if (!eventService.existsByCategoryId(categoryId)) {
+        EventCategory category = getCategoryById(categoryId);
+        if (!categoryRepository.existsEventsByCategoryId(categoryId)) {
             categoryRepository.delete(category);
             log.debug("Category id={} has been deleted", categoryId);
         }
@@ -54,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryDto updateCategory(CategoryDto categoryDto) {
-        EventCategory category = getCategoryOr404Error(categoryDto.getId());
+        EventCategory category = getCategoryById(categoryDto.getId());
         category.setName(categoryDto.getName());
         categoryRepository.save(category);
         log.debug("Category id={} has been updated", category.getId());
@@ -71,6 +63,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto findCategoriesById(Long catId) {
         log.debug("Category id={} was found", catId);
-        return CategoryMapper.toCategoryDto(getCategoryOr404Error(catId));
+        return CategoryMapper.toCategoryDto(getCategoryById(catId));
     }
 }

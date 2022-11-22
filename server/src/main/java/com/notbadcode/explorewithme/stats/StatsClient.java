@@ -7,6 +7,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
 
 import java.net.URLEncoder;
@@ -45,7 +46,7 @@ public class StatsClient {
         this.eventUri = eventUri;
     }
 
-    public void sendHit(String uriForStat, String ip) {
+    public void sendHit(String uriForStat, String ip) throws WebClientRequestException {
         EndpointHitDto hit = EndpointHitDto.builder()
                 .uri(uriForStat)
                 .app(app)
@@ -61,7 +62,7 @@ public class StatsClient {
         log.info("Send to {} endpoint hit: {}", statsUrl, hit);
     }
 
-    public Map<Long, Long> getStatsOfEvents(List<Long> eventIds) {
+    public Map<Long, Long> getStatsOfEvents(List<Long> eventIds) throws WebClientRequestException {
         StringBuilder stringBuilder = new StringBuilder(statsUri);
         // дата обязательна по ТЗ, а статистика запросов событий мне нужна за все время
         stringBuilder.append("?start=")
@@ -81,7 +82,6 @@ public class StatsClient {
         Map<Long, Long> idsCount = Optional.ofNullable(stats).orElse(new ArrayList<>()).stream()
                         .collect(Collectors.toMap(s -> Long.getLong(s.getUri().split("/")[1]),
                                 ViewStats::getHits));
-
         log.info("Get stats for {} events", idsCount.size());
         return idsCount;
     }

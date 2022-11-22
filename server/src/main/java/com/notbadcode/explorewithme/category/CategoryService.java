@@ -3,7 +3,7 @@ package com.notbadcode.explorewithme.category;
 import java.util.List;
 
 public interface CategoryService {
-    EventCategory getCategoryOr404Error(Long categoryId);
+    EventCategory getCategoryById(Long categoryId);
 
     CategoryDto createCategory(CategoryDto categoryDto);
 

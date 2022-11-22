@@ -73,7 +73,7 @@ public class EventPrivateController {
             @PathVariable Long eventId,
             HttpServletRequest request) {
         log.info("{}", ControllerLog.createUrlInfo(request));
-        return eventService.findEventById(eventId, userId);
+        return eventService.findEventByInitiatorById(eventId, userId);
     }
 
     @Operation(summary = "Получение событий, добавленных текущим пользователем")

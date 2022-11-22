@@ -3,6 +3,7 @@ package com.notbadcode.explorewithme.compilation;
 import com.notbadcode.explorewithme.compilation.dto.CompilationDto;
 import com.notbadcode.explorewithme.compilation.dto.NewCompilationDto;
 import com.notbadcode.explorewithme.error.BadRequestException;
+import com.notbadcode.explorewithme.error.ForbiddenException;
 import com.notbadcode.explorewithme.error.NotFoundException;
 import com.notbadcode.explorewithme.event.Event;
 import com.notbadcode.explorewithme.event.EventService;
@@ -25,7 +26,7 @@ public class CompilationServiceImpl implements CompilationService {
     private final EventService eventService;
 
     @Override
-    public Compilation getCompilationOr404Error(Long compId) {
+    public Compilation getCompilationById(Long compId) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Compilation with id=" + compId + " was not found"));
         log.debug("Load compilation id={}", compilation.getId());
@@ -45,7 +46,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void deleteCompilation(Long compId) {
-        Compilation compilation = getCompilationOr404Error(compId);
+        Compilation compilation = getCompilationById(compId);
         compilationRepository.delete(compilation);
         log.debug("Compilation id={} has been deleted", compId);
     }
@@ -53,8 +54,8 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void deleteEventFromCompilation(Long compId, Long eventId) {
-        Compilation compilation = getCompilationOr404Error(compId);
-        Event event = eventService.getEventOr404Error(eventId);
+        Compilation compilation = getCompilationById(compId);
+        Event event = eventService.getEventById(eventId);
         List<Event> events = compilation.getEvents();
         if (!events.contains(event)) {
             throw new BadRequestException("Event not in compilation");
@@ -68,8 +69,8 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void addEventToCompilation(Long compId, Long eventId) {
-        Compilation compilation = getCompilationOr404Error(compId);
-        Event event = eventService.getEventOr404Error(eventId);
+        Compilation compilation = getCompilationById(compId);
+        Event event = eventService.getEventById(eventId);
         List<Event> events = compilation.getEvents();
         if (events.contains(event)) {
             throw new BadRequestException("Event already in compilation");
@@ -83,7 +84,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void deletePinOfCompilation(Long compId) {
-        Compilation compilation = getCompilationOr404Error(compId);
+        Compilation compilation = getCompilationById(compId);
         if (!compilation.getPinned()) {
             throw new BadRequestException("Compilation already unpinned");
         }
@@ -95,9 +96,9 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void setPinOfCompilation(Long compId) {
-        Compilation compilation = getCompilationOr404Error(compId);
+        Compilation compilation = getCompilationById(compId);
         if (compilation.getPinned()) {
-            throw new BadRequestException("Compilation already pinned");
+            throw new ForbiddenException("Compilation already pinned");
         }
         compilation.setPinned(true);
         compilationRepository.save(compilation);
@@ -119,7 +120,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto findCompilationById(Long compId) {
-        Compilation compilation = getCompilationOr404Error(compId);
+        Compilation compilation = getCompilationById(compId);
         log.debug("Found compilation id={}", compilation.getId());
         return CompilationMapper.toCompilationDto(compilation);
     }

@@ -1,7 +1,6 @@
 package com.notbadcode.explorewithme.compilation.dto;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -10,12 +9,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewCompilationDto {
-    List<Long> events;
+    private List<Long> events;
 
-    Boolean pinned;
+    private Boolean pinned;
 
     @NotBlank
-    String title;
+    private String title;
 }

@@ -1,5 +1,7 @@
 package com.notbadcode.explorewithme.event;
 
+import com.notbadcode.explorewithme.error.BadRequestException;
+
 public enum EventState {
     PENDING,
     PUBLISHED,
@@ -12,6 +14,6 @@ public enum EventState {
                 return state;
             }
         }
-        return null;
+        throw new BadRequestException("Wrong event state");
     }
 }

@@ -1,7 +1,6 @@
 package com.notbadcode.explorewithme.event;
 
 import com.notbadcode.explorewithme.event.dto.*;
-import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +10,11 @@ import java.util.Optional;
 public interface EventService {
     EventFullDto createEvent(NewEventDto eventDto, Long userId);
 
-    boolean existsByCategoryId(Long categoryId);
-
-    EventFullDto findEventById(Long eventId, Long userId);
+    EventFullDto findEventByInitiatorById(Long eventId, Long userId);
 
     EventFullDto findEventById(HttpServletRequest request, Long eventId);
 
-    Event getEventOr404Error(Long eventId);
+    Event getEventById(Long eventId);
 
     List<EventShortDto> findEventsByUserId(Long userId, int from, int size);
 
@@ -56,13 +53,9 @@ public interface EventService {
 
     List<Event> findEventsByIds(List<Long> ids);
 
-    void addStartEndToBooleanBuilder(
-            Optional<String> rangeStartOptional,
-            Optional<String> rangeEndOptional,
-            BooleanBuilder builder
-    );
-
     List<Event> setViewsByStatsServer(List<Event> events);
+
+    void sendStatsByClient(HttpServletRequest request);
 
     List<Event> setViewsByStatsServer(Page<Event> events);
 
