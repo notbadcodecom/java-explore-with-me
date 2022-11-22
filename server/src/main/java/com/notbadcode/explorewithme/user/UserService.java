@@ -13,5 +13,5 @@ public interface UserService {
 
     List<UserDto> findUsers(Optional<List<Long>> ids, int from, int size);
 
-    User getUserOr404Error(Long userId);
+    User getUserById(Long userId);
 }

@@ -23,13 +23,14 @@ Pull-Request: https://github.com/notbadcodecom/java-explore-with-me/pull/3
 - Hibernate, JPA, QueryDSL;
 - PostgreSQL, SQL, FlyBase;
 - Swagger;
+- Junit, Mockito;
 - Docker, docker-compose;
 - Maven (multi-module project);
 - Postman.
 
 ## Запуск и тестирование проекта
 **приложение использует порты 8080, 9090, 6541, 6542.**
-1. git clone git@github.com:notbadcodecom/java-shareit.git
+1. git clone https://github.com/notbadcodecom/java-explore-with-me.git
 2. mvn package
 3. docker-compose up
 

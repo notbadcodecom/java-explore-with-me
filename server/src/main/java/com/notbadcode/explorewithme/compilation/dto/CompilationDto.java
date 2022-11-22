@@ -2,7 +2,6 @@ package com.notbadcode.explorewithme.compilation.dto;
 
 import com.notbadcode.explorewithme.event.dto.EventShortDto;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -10,13 +9,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompilationDto {
-    Long id;
+    private Long id;
 
-    List<EventShortDto> events;
+    private List<EventShortDto> events;
 
-    Boolean pinned;
+    private Boolean pinned;
 
-    String title;
+    private String title;
 }

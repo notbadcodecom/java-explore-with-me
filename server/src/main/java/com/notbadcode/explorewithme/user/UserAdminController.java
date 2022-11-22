@@ -59,7 +59,7 @@ public class UserAdminController {
             @RequestParam(name = "size", defaultValue = "20") int size,
             HttpServletRequest request
     ) {
-        log.info("{}", ControllerLog.createUrlInfo(request));
+         log.info("{}", ControllerLog.createUrlInfo(request));
         return userService.findUsers(ids, from, size);
     }
 }
