@@ -105,4 +105,19 @@ public class EventPrivateController {
         log.info("{}", ControllerLog.createUrlInfo(request));
         return eventService.cancelEventById(eventId, userId);
     }
+
+    @Operation(summary = "Добавление нового события с проверкой попадания в локацию")
+    @ApiResponse(responseCode = "200", description = "Событие добавлено",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = EventFullDto.class))})
+    @PostMapping("/locations/{locationId}")
+    @ResponseStatus(HttpStatus.OK)
+    public EventFullDto createEventInLocation(
+            @Valid @RequestBody NewEventDto eventDto,
+            @PathVariable Long userId,
+            @PathVariable Long locationId,
+            HttpServletRequest request
+    ) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
+        return eventService.createEventInLocation(eventDto, userId, locationId);
+    }
 }

@@ -4,6 +4,7 @@ import com.notbadcode.explorewithme.event.dto.AdminUpdateEventDto;
 import com.notbadcode.explorewithme.event.dto.EventFullDto;
 import com.notbadcode.explorewithme.util.ControllerLog;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,6 +35,8 @@ public class EventAdminController {
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> findEventsByParams(
             @RequestParam Optional<List<Long>> users,
+            @Parameter(allowEmptyValue = true,
+                    array = @ArraySchema(schema = @Schema(implementation = EventState.class)))
             @RequestParam Optional<List<String>> states,
             @RequestParam Optional<List<Long>> categories,
             @RequestParam Optional<String> rangeStart,

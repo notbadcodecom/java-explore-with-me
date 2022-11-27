@@ -4,6 +4,7 @@ import com.notbadcode.explorewithme.event.dto.EventFullDto;
 import com.notbadcode.explorewithme.event.dto.EventShortDto;
 import com.notbadcode.explorewithme.util.ControllerLog;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,6 +48,7 @@ public class EventPublicController {
             @RequestParam Optional<String> rangeStart,
             @RequestParam Optional<String> rangeEnd,
             @RequestParam Optional<Boolean> onlyAvailable,
+            @Parameter(allowEmptyValue = true, schema = @Schema(implementation = EventSort.class))
             @RequestParam Optional<String> sort,
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "20") int size
@@ -67,5 +69,16 @@ public class EventPublicController {
     public EventFullDto findEventById(@PathVariable Long eventId, HttpServletRequest request) {
         log.info("{}", ControllerLog.createUrlInfo(request));
         return eventService.findEventById(request, eventId);
+    }
+
+    @Operation(summary = "Получение опубликованных событий по локации")
+    @ApiResponse(responseCode = "200", description = "События найдены",
+            content = {@Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = EventShortDto.class)))})
+    @GetMapping("locations/{locationId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EventShortDto> findEventsInLocation(HttpServletRequest request, @PathVariable Long locationId) {
+        log.info("{}", ControllerLog.createUrlInfo(request));
+        return eventService.findEventsInLocation(locationId);
     }
 }

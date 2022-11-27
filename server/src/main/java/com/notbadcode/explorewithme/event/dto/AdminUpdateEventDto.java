@@ -1,5 +1,6 @@
 package com.notbadcode.explorewithme.event.dto;
 
+import com.notbadcode.explorewithme.locations.dto.LocationShortDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class AdminUpdateEventDto {
 
     LocalDateTime eventDate;
 
-    LocationDto location;
+    LocationShortDto location;
 
     Long category;
 
