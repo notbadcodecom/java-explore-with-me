@@ -1,4 +1,4 @@
-package com.notbadcode.explorewithme.event.dto;
+package com.notbadcode.explorewithme.locations.dto;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Builder
 @ToString
-public class LocationDto {
+public class LocationShortDto {
     @NotNull(message = "Lat in event location is required")
     Double lat;
 

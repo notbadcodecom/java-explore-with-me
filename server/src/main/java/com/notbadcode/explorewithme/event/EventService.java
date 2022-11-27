@@ -60,4 +60,8 @@ public interface EventService {
     List<Event> setViewsByStatsServer(Page<Event> events);
 
     Event setViewsByStatsServer(Event event);
+
+    List<EventShortDto> findEventsInLocation(Long locationId);
+
+    EventFullDto createEventInLocation(NewEventDto eventDto, Long userId, Long locationId);
 }

@@ -8,6 +8,7 @@ import com.notbadcode.explorewithme.error.NotFoundException;
 import com.notbadcode.explorewithme.event.dto.AdminUpdateEventDto;
 import com.notbadcode.explorewithme.event.dto.EventFullDto;
 import com.notbadcode.explorewithme.event.dto.UpdateEventDto;
+import com.notbadcode.explorewithme.locations.LocationService;
 import com.notbadcode.explorewithme.stats.StatsClient;
 import com.notbadcode.explorewithme.user.User;
 import com.notbadcode.explorewithme.user.UserService;
@@ -34,6 +35,7 @@ class EventServiceImplUnitTest {
     @Mock private UserService userService;
     @Mock private CategoryService categoryService;
     @Mock private StatsClient client;
+    @Mock private LocationService locationService;
     private EventService eventService;
     @Value("${ewm-config.event.service.hoursBeforePublication}") int minHoursBeforePublication;
     Event event;
@@ -73,7 +75,7 @@ class EventServiceImplUnitTest {
                 .email("not-initiator@email.com")
                 .build();
         eventService = new EventServiceImpl(
-                eventRepository, userService, categoryService, client, minHoursBeforePublication
+                eventRepository, userService, categoryService, locationService, client, minHoursBeforePublication
         );
         Mockito.doReturn(Optional.of(event)).when(eventRepository).findById(1L);
     }
