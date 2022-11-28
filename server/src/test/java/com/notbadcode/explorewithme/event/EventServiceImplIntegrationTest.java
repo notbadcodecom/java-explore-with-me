@@ -37,8 +37,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 @Testcontainers
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public
-class EventServiceImplIntegrationTest {
+public class EventServiceImplIntegrationTest {
     private final EventService eventService;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
