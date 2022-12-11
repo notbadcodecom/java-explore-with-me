@@ -2,7 +2,7 @@ package com.notbadcode.explorewithme.event;
 
 import com.notbadcode.explorewithme.event.dto.EventFullDto;
 import com.notbadcode.explorewithme.event.dto.EventShortDto;
-import com.notbadcode.explorewithme.locations.dto.LocationShortDto;
+import com.notbadcode.explorewithme.location.dto.LocationShortDto;
 import com.notbadcode.explorewithme.event.dto.NewEventDto;
 import com.notbadcode.explorewithme.category.CategoryDto;
 import com.notbadcode.explorewithme.user.UserMapper;

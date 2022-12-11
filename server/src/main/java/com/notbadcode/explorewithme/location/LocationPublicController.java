@@ -1,6 +1,6 @@
-package com.notbadcode.explorewithme.locations;
+package com.notbadcode.explorewithme.location;
 
-import com.notbadcode.explorewithme.locations.dto.LocationFullDto;
+import com.notbadcode.explorewithme.location.dto.LocationFullDto;
 import com.notbadcode.explorewithme.util.ControllerLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

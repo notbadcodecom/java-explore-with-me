@@ -13,6 +13,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
     List<Event> findByIdIn(List<Long> ids);
 
     @Query(value = "SELECT e FROM Event e " +
-            "WHERE distance(e.lat, e.lon, :lat, :lon) <= :radius")
+            "WHERE distance(e.lat, e.lon, :lat, :lon) <= :radius " +
+            "AND e.state = 'PUBLISHED'")
     List<Event> findIncludedInLocation(Double lat, Double lon, Long radius);
 }

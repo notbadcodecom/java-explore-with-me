@@ -4,7 +4,7 @@ import com.notbadcode.explorewithme.EwmPostgresqlContainer;
 import com.notbadcode.explorewithme.category.CategoryRepository;
 import com.notbadcode.explorewithme.category.EventCategory;
 import com.notbadcode.explorewithme.event.dto.*;
-import com.notbadcode.explorewithme.locations.dto.LocationShortDto;
+import com.notbadcode.explorewithme.location.dto.LocationShortDto;
 import com.notbadcode.explorewithme.stats.StatsClient;
 import com.notbadcode.explorewithme.user.User;
 import com.notbadcode.explorewithme.user.UserRepository;

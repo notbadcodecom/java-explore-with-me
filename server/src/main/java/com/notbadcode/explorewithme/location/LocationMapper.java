@@ -1,6 +1,6 @@
-package com.notbadcode.explorewithme.locations;
+package com.notbadcode.explorewithme.location;
 
-import com.notbadcode.explorewithme.locations.dto.LocationFullDto;
+import com.notbadcode.explorewithme.location.dto.LocationFullDto;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 

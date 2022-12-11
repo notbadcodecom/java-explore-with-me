@@ -1,6 +1,6 @@
 package com.notbadcode.explorewithme.event.dto;
 
-import com.notbadcode.explorewithme.locations.dto.LocationShortDto;
+import com.notbadcode.explorewithme.location.dto.LocationShortDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

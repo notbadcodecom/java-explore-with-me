@@ -1,8 +1,8 @@
 package com.notbadcode.explorewithme.event;
 
 import com.notbadcode.explorewithme.category.CategoryService;
-import com.notbadcode.explorewithme.locations.Location;
-import com.notbadcode.explorewithme.locations.LocationService;
+import com.notbadcode.explorewithme.location.Location;
+import com.notbadcode.explorewithme.location.LocationService;
 import com.notbadcode.explorewithme.stats.StatsClient;
 import com.notbadcode.explorewithme.error.BadRequestException;
 import com.notbadcode.explorewithme.error.ForbiddenException;

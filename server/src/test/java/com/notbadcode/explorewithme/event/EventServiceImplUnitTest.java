@@ -8,7 +8,7 @@ import com.notbadcode.explorewithme.error.NotFoundException;
 import com.notbadcode.explorewithme.event.dto.AdminUpdateEventDto;
 import com.notbadcode.explorewithme.event.dto.EventFullDto;
 import com.notbadcode.explorewithme.event.dto.UpdateEventDto;
-import com.notbadcode.explorewithme.locations.LocationService;
+import com.notbadcode.explorewithme.location.LocationService;
 import com.notbadcode.explorewithme.stats.StatsClient;
 import com.notbadcode.explorewithme.user.User;
 import com.notbadcode.explorewithme.user.UserService;

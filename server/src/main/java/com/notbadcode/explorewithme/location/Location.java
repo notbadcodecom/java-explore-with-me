@@ -1,4 +1,4 @@
-package com.notbadcode.explorewithme.locations;
+package com.notbadcode.explorewithme.location;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

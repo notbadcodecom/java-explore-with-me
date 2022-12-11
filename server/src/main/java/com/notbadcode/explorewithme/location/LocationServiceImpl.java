@@ -1,7 +1,7 @@
-package com.notbadcode.explorewithme.locations;
+package com.notbadcode.explorewithme.location;
 
 import com.notbadcode.explorewithme.error.NotFoundException;
-import com.notbadcode.explorewithme.locations.dto.LocationFullDto;
+import com.notbadcode.explorewithme.location.dto.LocationFullDto;
 import com.notbadcode.explorewithme.util.SizeRequest;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +36,8 @@ public class LocationServiceImpl implements LocationService {
                 .map(locationRepository::save)
                 .map(LocationMapper::toLocationFullDto)
                 .peek(location -> log.debug("Save new location : {}", location))
-                .findAny()
-                .get();
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("database saving error"));
     }
 
     @Override
@@ -53,7 +53,8 @@ public class LocationServiceImpl implements LocationService {
                 .map(locationRepository::save)
                 .map(LocationMapper::toLocationFullDto)
                 .peek(loc -> log.debug("Update location : {}", loc))
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("database saving error"));
     }
 
     @Override

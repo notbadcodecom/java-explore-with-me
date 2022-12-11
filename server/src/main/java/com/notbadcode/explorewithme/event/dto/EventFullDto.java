@@ -3,7 +3,7 @@ package com.notbadcode.explorewithme.event.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.notbadcode.explorewithme.category.CategoryDto;
 import com.notbadcode.explorewithme.event.EventState;
-import com.notbadcode.explorewithme.locations.dto.LocationShortDto;
+import com.notbadcode.explorewithme.location.dto.LocationShortDto;
 import com.notbadcode.explorewithme.user.dto.UserShortDto;
 import lombok.AccessLevel;
 import lombok.Builder;
