@@ -1,8 +1,11 @@
 package com.notbadcode.explorewithme.event;
 
+import com.notbadcode.explorewithme.EwmPostgresqlContainer;
 import com.notbadcode.explorewithme.category.CategoryRepository;
 import com.notbadcode.explorewithme.category.EventCategory;
 import com.notbadcode.explorewithme.event.dto.*;
+import com.notbadcode.explorewithme.location.dto.LocationShortDto;
+import com.notbadcode.explorewithme.stats.StatsClient;
 import com.notbadcode.explorewithme.user.User;
 import com.notbadcode.explorewithme.user.UserRepository;
 import com.notbadcode.explorewithme.util.CommonDateTime;
@@ -10,11 +13,14 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -24,21 +30,27 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 
 
 @SpringBootTest
-@ActiveProfiles("test")
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Testcontainers
 @Transactional
-class EventServiceImplIntegrationTest {
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+public class EventServiceImplIntegrationTest {
     private final EventService eventService;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     @MockBean
     HttpServletRequest request;
+    @MockBean
+    StatsClient client;
     NewEventDto newEventDto;
     EventCategory category;
     User initiator;
+
+    @Container
+    public static PostgreSQLContainer<EwmPostgresqlContainer> container = EwmPostgresqlContainer.getInstance();
 
     @BeforeEach
     void setUp() {
@@ -56,13 +68,14 @@ class EventServiceImplIntegrationTest {
                 .annotation("Annotation")
                 .description("Description")
                 .participantLimit(0)
-                .location(LocationDto.builder()
+                .location(LocationShortDto.builder()
                         .lat(51.1234)
                         .lon(15.5432)
                         .build())
                 .title("title")
                 .paid(Boolean.FALSE)
                 .build();
+        Mockito.doNothing().when(client).sendHit(anyString(), anyString());
     }
 
     @Test
@@ -169,7 +182,7 @@ class EventServiceImplIntegrationTest {
                     .annotation("Annotation")
                     .description("Description")
                     .participantLimit(0)
-                    .location(LocationDto.builder()
+                    .location(LocationShortDto.builder()
                             .lat(51.1234)
                             .lon(15.5432)
                             .build())
@@ -238,7 +251,7 @@ class EventServiceImplIntegrationTest {
                     .annotation((i % 3 == 0) ? "Annotation" : "Summarize")
                     .description((i % 4 == 0) ? "Description" : "Summarize")
                     .participantLimit((int)i)
-                    .location(LocationDto.builder()
+                    .location(LocationShortDto.builder()
                             .lat(51.1234)
                             .lon(15.5432)
                             .build())
@@ -313,7 +326,7 @@ class EventServiceImplIntegrationTest {
                     .annotation("Annotation")
                     .description("Description")
                     .participantLimit(0)
-                    .location(LocationDto.builder()
+                    .location(LocationShortDto.builder()
                             .lat(51.1234)
                             .lon(15.5432)
                             .build())

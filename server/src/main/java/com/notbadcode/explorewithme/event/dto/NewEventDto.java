@@ -1,6 +1,7 @@
 package com.notbadcode.explorewithme.event.dto;
 
 import com.notbadcode.explorewithme.event.DateTimeStartHourValidation;
+import com.notbadcode.explorewithme.location.dto.LocationShortDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class NewEventDto {
     LocalDateTime eventDate;
 
     @NotNull(message = "Event location is required")
-    LocationDto location;
+    LocationShortDto location;
 
     @NotNull(message = "Category id is required")
     Long category;

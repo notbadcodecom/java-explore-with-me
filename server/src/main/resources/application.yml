@@ -47,7 +47,7 @@ spring:
     activate:
       on-profile: "test"
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:ewm
-    username: ewm
-    password: ewm
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    

@@ -1,6 +1,8 @@
 package com.notbadcode.explorewithme.event;
 
 import com.notbadcode.explorewithme.category.CategoryService;
+import com.notbadcode.explorewithme.location.Location;
+import com.notbadcode.explorewithme.location.LocationService;
 import com.notbadcode.explorewithme.stats.StatsClient;
 import com.notbadcode.explorewithme.error.BadRequestException;
 import com.notbadcode.explorewithme.error.ForbiddenException;
@@ -33,6 +35,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final LocationService locationService;
     private final StatsClient client;
     private final int minHoursBeforePublication;
 
@@ -41,12 +44,14 @@ public class EventServiceImpl implements EventService {
             EventRepository eventRepository,
             UserService userService,
             CategoryService categoryService,
+            LocationService locationService,
             StatsClient client,
             @Value("${ewm-config.event.service.hoursBeforePublication}") int hours
     ) {
         this.eventRepository = eventRepository;
         this.userService = userService;
         this.categoryService = categoryService;
+        this.locationService = locationService;
         this.client = client;
         this.minHoursBeforePublication = hours;
     }
@@ -338,5 +343,45 @@ public class EventServiceImpl implements EventService {
         }
         event.setViews(views.getOrDefault(event.getId(), 0L));
         return event;
+    }
+
+    @Override
+    public List<EventShortDto> findEventsInLocation(Long locationId) {
+        Location location = locationService.getLocationById(locationId);
+        List<Event> events = eventRepository.findIncludedInLocation(
+                location.getLat(), location.getLon(), location.getRadius()
+        );
+        log.info("Found {} events in location id={}", events.size(), locationId);
+        return EventMapper.toEventShortDto(events);
+    }
+
+    @Override
+    public EventFullDto createEventInLocation(NewEventDto eventDto, Long userId, Long locationId) {
+        Location location = locationService.getLocationById(locationId);
+        Double lat1 = Optional.ofNullable(eventDto.getLocation().getLat())
+                .orElseThrow(() -> new BadRequestException("Wrong location"));
+        Double lon1 = Optional.ofNullable(eventDto.getLocation().getLon())
+                .orElseThrow(() -> new BadRequestException("Wrong location"));
+        // переводим градусы широты в радианы
+        double radLat1 = Math.PI * lat1 / 180;
+        // переводим градусы долготы в радианы
+        double radLat2 = Math.PI * location.getLat() / 180;
+        // находим разность долгот
+        double theta = lon1 - location.getLon();
+        // переводим градусы в радианы
+        double radTheta = Math.PI * theta / 180;
+        // находим длину ортодромии
+        double dist = Math.sin(radLat1) * Math.sin(radLat2)
+                + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
+        dist = (dist > 1) ? 1 : dist;
+        dist = Math.acos(dist);
+        // переводим радианы в градусы
+        dist = dist * 180 / Math.PI;
+        // переводим градусы в километры
+        dist = dist * 60 * 1.8524;
+        if (lat1.equals(location.getLat()) && lon1.equals(location.getLon()) || dist <= location.getRadius()) {
+            createEvent(eventDto, userId);
+        }
+        throw new BadRequestException("Wrong location");
     }
 }
